@@ -2,7 +2,7 @@ import java.math.BigDecimal;
 import java.text.NumberFormat;
 
 public class Main {
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         // initial principal amount before interest
         BigDecimal principal = BigDecimal.valueOf(1000.0);
         BigDecimal rate = BigDecimal.valueOf(0.05); // interest rate
