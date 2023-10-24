@@ -1,21 +1,13 @@
 public enum TrafficLight {
-    RED("Red light", "60 seconds"),
-    YELLOW("Yellow light", "5 seconds"),
-    GREEN("Green light", "45 seconds");
+    RED("60 seconds"),
+    YELLOW("5 seconds"),
+    GREEN("45 seconds");
 
-    private final String lightColor;
     private final String lightDuration;
 
-    TrafficLight(String lightColor, String lightDuration) {
-        this.lightColor = lightColor;
+    TrafficLight(String lightDuration) {
         this.lightDuration = lightDuration;
     }
 
-    public String getLightColor() {
-        return lightColor;
-    }
-
-    public String getLightDuration() {
-        return lightDuration;
-    }
+    public String getLightDuration() { return this.lightDuration; }
 }
