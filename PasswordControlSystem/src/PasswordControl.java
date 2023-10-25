@@ -2,12 +2,30 @@ import java.util.ArrayList;
 
 public class PasswordControl {
     private final ArrayList<Integer> queue = new ArrayList<>();
+    private final ArrayList<Integer> preferencialQueue = new ArrayList<>();
     private int nextPasswordNumber = 1;
+    private int age;
+    private int preferencialCounter;
 
+    public void setAge(int age) {
+        this.age = age;
+    }
+    public int getAge() {
+        return this.age;
+    }
+    public int getPreferencialCounter() {
+        return this.preferencialCounter;
+    }
     public void emitNewPassword() {
         int newPassword = nextPasswordNumber;
+        int clientAge = getAge();
         nextPasswordNumber++;
-        queue.add(newPassword);
+
+        if (clientAge < 60)
+            queue.add(newPassword);
+        else
+            preferencialQueue.add(newPassword);
+
         System.out.println("New password: " + newPassword);
     }
 
@@ -15,12 +33,30 @@ public class PasswordControl {
         if (queue.contains(password)) {
             queue.remove((Integer) password);
             System.out.println("Password " + password + " removed.");
-        }
-        else {
+        } else if (preferencialQueue.contains(password)) {
+            preferencialQueue.remove((Integer) password);
+            System.out.println("Password " + password + " removed.");
+        } else {
             System.out.println("Password not found.");
         }
     }
 
+    public void preferencialNext() {
+        if (preferencialCounter >= 2) {
+            serverNext();
+        }
+        else {
+            if (!preferencialQueue.isEmpty()) {
+                int nextPassword = preferencialQueue.get(0);
+                preferencialQueue.remove(0);
+                System.out.println("Next password: " + nextPassword);
+                preferencialCounter++;
+            }
+            else {
+                serverNext();
+            }
+        }
+    }
     public void serverNext() {
         if (!queue.isEmpty()) {
             int nextPassword = queue.get(0);
@@ -32,15 +68,14 @@ public class PasswordControl {
         }
     }
 
-    public int findPasswordPosition(Integer password) {
+    public void findPasswordPosition(Integer password) {
         if (password == null) {
             System.out.println("The given password does not exist. Type a valid password.");
-            return -1;
+            return;
         }
         int position = queue.indexOf(password) + 1;
         System.out.println("The password " + password + " is current in the position " + position + " in the line.");
 
-        return 0;
     }
 
     public void printPasswordQueue() {

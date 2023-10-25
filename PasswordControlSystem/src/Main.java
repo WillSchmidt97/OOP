@@ -18,6 +18,9 @@ public class Main {
 
             switch (option) {
                 case 1:
+                    System.out.print("Could you please tell us your client's age: ");
+                    int cAge = scanner.nextInt();
+                    passwordControl.setAge(cAge);
                     passwordControl.emitNewPassword();
                     break;
                 case 2:
@@ -25,7 +28,12 @@ public class Main {
                     int giveUp = scanner.nextInt();
                     passwordControl.giveUpQueue(giveUp);
                 case 3:
-                    passwordControl.serverNext();
+                    int counter = passwordControl.getPreferencialCounter();
+
+                    if (counter >= 2)
+                        passwordControl.serverNext();
+                    else
+                        passwordControl.preferencialNext();
                     break;
                 case 4:
                     System.out.print("\nType the password you want to find in the line: ");
