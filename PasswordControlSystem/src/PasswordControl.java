@@ -81,6 +81,17 @@ public class PasswordControl {
     public void printPasswordQueue() {
         System.out.println("Currently passwords in the line: ");
 
+        if (this.preferencialCounter < 2) {
+            for (int c = 0; c < 2; c++) {
+                int preferencialPassword = preferencialQueue.get(c);
+                System.out.print(preferencialPassword);
+
+                if (!queue.isEmpty())
+                {
+                    System.out.print(", ");
+                }
+            }
+        }
         for (int i = 0; i < queue.size(); i++) {
             int password = queue.get(i);
             System.out.print(password);
