@@ -82,11 +82,12 @@ public class PasswordControl {
         System.out.println("Currently passwords in the line: ");
 
         if (this.preferencialCounter < 2) {
-            for (int c = 0; c < 2; c++) {
+            int preferencialSize = preferencialQueue.size();
+            for (int c = 0; c < preferencialSize; c++) {
                 int preferencialPassword = preferencialQueue.get(c);
                 System.out.print(preferencialPassword);
 
-                if (!queue.isEmpty())
+                if (c < preferencialSize - 1 || !queue.isEmpty())
                 {
                     System.out.print(", ");
                 }
