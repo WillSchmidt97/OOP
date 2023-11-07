@@ -23,9 +23,10 @@ public class PasswordControl {
 
         if (clientAge < 60)
             queue.add(newPassword);
-        else
+        else {
             preferencialQueue.add(newPassword);
-
+            this.preferencialCounter++;
+        }
         System.out.println("New password: " + newPassword);
     }
 
@@ -42,10 +43,7 @@ public class PasswordControl {
     }
 
     public void preferencialNext() {
-        if (preferencialCounter >= 2) {
-            serverNext();
-        }
-        else {
+            //TODO FIX THE BUG WHERE I HAVE TO CALL AT MOST 2 PREFERENCIAL PASSWORDS
             if (!preferencialQueue.isEmpty()) {
                 int nextPassword = preferencialQueue.get(0);
                 preferencialQueue.remove(0);
@@ -55,7 +53,6 @@ public class PasswordControl {
             else {
                 serverNext();
             }
-        }
     }
     public void serverNext() {
         if (!queue.isEmpty()) {
@@ -80,25 +77,34 @@ public class PasswordControl {
 
     public void printPasswordQueue() {
         System.out.println("Currently passwords in the line: ");
+        int preferencialSize = preferencialQueue.size();
 
-        if (this.preferencialCounter < 2) {
-            int preferencialSize = preferencialQueue.size();
-            for (int c = 0; c < preferencialSize; c++) {
-                int preferencialPassword = preferencialQueue.get(c);
-                System.out.print(preferencialPassword);
+        for (int c = 0; c < Math.min(2, preferencialSize); c++) {
+            int preferencialPassword = preferencialQueue.get(c);
+            System.out.print(preferencialPassword);
 
-                if (c < preferencialSize - 1 || !queue.isEmpty())
-                {
-                    System.out.print(", ");
-                }
+            if (c < Math.min(2, preferencialSize) - 1 || !queue.isEmpty())
+            {
+                System.out.print(", ");
             }
         }
+
         for (int i = 0; i < queue.size(); i++) {
             int password = queue.get(i);
+
+            if (i == 0 && preferencialSize >= 2) {
+                System.out.print(", ");
+            }
             System.out.print(password);
 
             if (i < queue.size() - 1) {
                 System.out.print(", ");
+            }
+        }
+
+        if (preferencialSize >= 2) {
+            for (int r = 2; r < preferencialSize; r++) {
+                System.out.print(", " + preferencialQueue.get(r));
             }
         }
         System.out.println();
