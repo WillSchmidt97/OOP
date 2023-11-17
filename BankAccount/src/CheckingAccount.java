@@ -6,4 +6,14 @@ public class CheckingAccount extends Account {
         super(client, accountNumber, balance);
         limit = l;
     }
+
+    @Override
+    public void withdraw(BigDecimal value) {
+        if (value.compareTo(limit) <= 0) {
+            balance = balance.subtract(value);
+        }
+        else {
+            System.out.println("An error occurred. Check if you have sufficient balance for the transaction or try again.");
+        }
+    }
 }
