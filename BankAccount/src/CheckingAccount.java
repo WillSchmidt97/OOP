@@ -13,7 +13,7 @@ public class CheckingAccount extends Account {
             balance = balance.subtract(value);
         }
         else {
-            System.out.println("An error occurred. Check if you have sufficient balance for the transaction or try again.");
+            System.out.println("An error occurred. Chosen amount above the limit rate.");
         }
     }
 }
