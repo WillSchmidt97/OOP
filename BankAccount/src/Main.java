@@ -44,6 +44,8 @@ public class Main {
 
                     SavingsAccount savingsAccount = new SavingsAccount(name, accountNumber, balance, income);
                 }
+            case 2:
+
         }
     }
 }
