@@ -1,51 +1,133 @@
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
+        Map<String, Account> accounts = new HashMap<>();
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Welcome to W-Bank, I am your virtual assistant!");
-        System.out.println("Please, choose among the options what you want to do: ");
+        while (true) {
+            System.out.println("1. Create an account");
+            System.out.println("2. Withdraw");
+            System.out.println("3. Update savings account with interest");
+            System.out.println("4. Deposit");
+            System.out.println("5. Show balance");
+            System.out.println("0. Exit");
 
-        System.out.println("\n1 - Register a new account.");
+            int option = scanner.nextInt();
+            scanner.nextLine(); // Consume the newline character
 
-        System.out.print("What would you like to do: ");
-        int choice = scanner.nextInt();
+            switch (option) {
+                case 1:
+                    createAccount(accounts, scanner);
+                    break;
+                case 2:
+                    performWithdrawal(accounts, scanner);
+                    break;
+                case 3:
+                    updateSavingsAccount(accounts, scanner);
+                    break;
+                case 4:
+                    performDeposit(accounts, scanner);
+                    break;
+                case 5:
+                    showBalance(accounts, scanner);
+                    break;
+                case 0:
+                    System.out.println("Exiting...");
+                    System.exit(0);
+                    break;
+                default:
+                    System.out.println("Invalid option.");
+            }
+        }
+    }
 
-        switch (choice) {
-            case 1:
-                Random r = new Random();
+    private static void createAccount(Map<String, Account> accounts, Scanner scanner) {
+        System.out.println("Enter the client's name:");
+        String client = scanner.nextLine();
 
-                System.out.print("\nDo you want to open a saving account? If you choose NO your account will be a standard checking account. YES - 1 NO - 0: ");
-                int accountChecker = scanner.nextInt();
+        System.out.println("Enter the account number:");
+        String accountNumber = scanner.nextLine();
 
-                if (accountChecker != 1) {
-                    System.out.print("\nTell us your name, please: ");
-                    String name = scanner.nextLine();
+        System.out.println("Enter the account type (1 for Savings, 2 for Checking):");
+        int accountType = scanner.nextInt();
+        scanner.nextLine();
 
-                    String accountNumber = String.format("%09d", r.nextInt(1000000000));
+        if (accountType == 1) {
+            System.out.println("Enter the interest day for the savings account:");
+            int interestDay = scanner.nextInt();
+            scanner.nextLine();
 
-                    BigDecimal balance = new BigDecimal("0");
-                    BigDecimal limit = new BigDecimal("200");
+            accounts.put(accountNumber, new SavingsAccount(client, accountNumber, BigDecimal.ZERO, interestDay));
+        } else if (accountType == 2) {
+            System.out.println("Enter the overdraft limit for the checking account:");
+            BigDecimal overdraftLimit = scanner.nextBigDecimal();
+            scanner.nextLine();
 
-                    CheckingAccount checkingAccount = new CheckingAccount(name, accountNumber, balance, limit);
-                }
-                else {
-                    System.out.print("\nTell us your name, please: ");
-                    String name = scanner.nextLine();
+            accounts.put(accountNumber, new CheckingAccount(client, accountNumber, BigDecimal.ZERO, overdraftLimit));
+        } else {
+            System.out.println("Invalid account type.");
+        }
+    }
 
-                    String accountNumber = String.format("%09d", r.nextInt(1000000000));
+    private static void performWithdrawal(Map<String, Account> accounts, Scanner scanner) {
+        System.out.println("Enter the account number:");
+        String accountNumber = scanner.nextLine();
 
-                    BigDecimal balance = new BigDecimal("0");
+        if (accounts.containsKey(accountNumber)) {
+            System.out.println("Enter the amount to withdraw:");
+            BigDecimal amount = scanner.nextBigDecimal();
+            scanner.nextLine();
 
-                    System.out.print("\nWhich daily rate you would like your Savings Account to have: ");
-                    int income = scanner.nextInt();
+            accounts.get(accountNumber).withdraw(amount);
+        } else {
+            System.out.println("Account not found.");
+        }
+    }
 
-                    SavingsAccount savingsAccount = new SavingsAccount(name, accountNumber, balance, income);
-                }
-            case 2:
+    private static void updateSavingsAccount(Map<String, Account> accounts, Scanner scanner) {
+        System.out.println("Enter the savings account number:");
+        String accountNumber = scanner.nextLine();
 
+        if (accounts.containsKey(accountNumber) && accounts.get(accountNumber) instanceof SavingsAccount savingsAccount) {
+
+            System.out.println("Enter the interest rate:");
+            BigDecimal interestRate = scanner.nextBigDecimal();
+            scanner.nextLine();
+
+            savingsAccount.calculateNewBalance(interestRate);
+        } else {
+            System.out.println("Savings account not found.");
+        }
+    }
+
+    private static void performDeposit(Map<String, Account> accounts, Scanner scanner) {
+        System.out.println("Enter the account number:");
+        String accountNumber = scanner.nextLine();
+
+        if (accounts.containsKey(accountNumber)) {
+            System.out.println("Enter the amount to deposit:");
+            BigDecimal amount = scanner.nextBigDecimal();
+            scanner.nextLine();
+
+            accounts.get(accountNumber).deposit(amount);
+        } else {
+            System.out.println("Account not found.");
+        }
+    }
+
+    private static void showBalance(Map<String, Account> accounts, Scanner scanner) {
+        System.out.println("Enter the account number:");
+        String accountNumber = scanner.nextLine();
+
+        if (accounts.containsKey(accountNumber)) {
+            BigDecimal balance = accounts.get(accountNumber).getBalance();
+            System.out.println("Account balance: " + balance);
+        } else {
+            System.out.println("Account not found.");
         }
     }
 }

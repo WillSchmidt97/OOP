@@ -1,21 +1,19 @@
 import java.math.BigDecimal;
 
 public class SavingsAccount extends Account {
-    public int dailyIncome;
-    public SavingsAccount(String client, String accountNumber, BigDecimal balance, int dIncome) {
+    private final int interestDay;
+
+    public SavingsAccount(String client, String accountNumber, BigDecimal balance, int interestDay) {
         super(client, accountNumber, balance);
-        dailyIncome = dIncome;
+        this.interestDay = interestDay;
     }
 
-    public void applyInterest(BigDecimal rate) {
-        if (rate.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException("The rate number has to be a positive number and greater than 0.");
+    public void calculateNewBalance(BigDecimal interestRate) {
+        if (interestDay == 27) { // Example: Interest applied on the 27th day of each month
+            balance = balance.add(balance.multiply(interestRate));
+            System.out.println("Interest applied. New balance: " + balance);
+        } else {
+            System.out.println("Not the interest day yet.");
         }
-
-        BigDecimal multiplier = rate.divide(BigDecimal.valueOf(100));
-        BigDecimal r = balance.multiply(multiplier);
-        balance = balance.add(r);
-
-        System.out.println("rate balance: " + r + ". New balance: " + balance);
     }
 }

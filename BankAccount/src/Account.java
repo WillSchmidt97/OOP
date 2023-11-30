@@ -35,21 +35,17 @@ public class Account {
         this.balance = balance;
     }
 
-    public void withdraw(BigDecimal value) {
-        if (value.compareTo(BigDecimal.ZERO) > 0 && value.compareTo(balance) <= 0) {
-            balance = balance.subtract(value);
-        }
-        else {
-            System.out.println("An error occurred. Check if you have sufficient balance for the transaction or try again.");
+    public void withdraw(BigDecimal amount) {
+        if (balance.subtract(amount).compareTo(BigDecimal.ZERO) >= 0) {
+            balance = balance.subtract(amount);
+            System.out.println("Withdrawal successful. New balance: " + balance);
+        } else {
+            System.out.println("Insufficient funds.");
         }
     }
 
-    public void deposit(BigDecimal value) {
-        if (value.compareTo(BigDecimal.ZERO) > 0) {
-            balance = balance.add(value);
-        }
-        else {
-            System.out.println("Invalid deposit.");
-        }
+    public void deposit(BigDecimal amount) {
+        balance = balance.add(amount);
+        System.out.println("Deposit successful. New balance: " + balance);
     }
 }
