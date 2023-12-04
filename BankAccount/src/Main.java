@@ -14,6 +14,8 @@ public class Main {
             System.out.println("3. Update savings account with interest");
             System.out.println("4. Deposit");
             System.out.println("5. Show balance");
+            System.out.println("6. Calculate tax");
+            System.out.println("7. Calculate admin fee (Investment Account)");
             System.out.println("0. Exit");
 
             int option = scanner.nextInt();
@@ -34,6 +36,12 @@ public class Main {
                     break;
                 case 5:
                     showBalance(accounts, scanner);
+                    break;
+                case 6:
+                    calculateTax(accounts, scanner);
+                    break;
+                case 7:
+                    calculateAdminFee(accounts, scanner);
                     break;
                 case 0:
                     System.out.println("Exiting...");
@@ -128,6 +136,41 @@ public class Main {
             System.out.println("Account balance: " + balance);
         } else {
             System.out.println("Account not found.");
+        }
+    }
+
+    private static void calculateTax(Map<String, Account> accounts, Scanner scanner) {
+        System.out.println("Enter the account number:");
+        String accountNumber = scanner.nextLine();
+
+        if (accounts.containsKey(accountNumber) && accounts.get(accountNumber) instanceof Taxable) {
+            Taxable taxableAccount = (Taxable) accounts.get(accountNumber);
+
+            System.out.println("Enter the interest rate:");
+            BigDecimal interestRate = scanner.nextBigDecimal();
+            scanner.nextLine(); // Consume the newline character
+
+            BigDecimal tax = taxableAccount.calculateTax(interestRate);
+            System.out.println("Tax calculated: " + tax);
+        } else {
+            System.out.println("Account not found or not taxable.");
+        }
+    }
+    private static void calculateAdminFee(Map<String, Account> accounts, Scanner scanner) {
+        System.out.println("Enter the account number:");
+        String accountNumber = scanner.nextLine();
+
+        if (accounts.containsKey(accountNumber) && accounts.get(accountNumber) instanceof InvestmentAccount) {
+            InvestmentAccount investmentAccount = (InvestmentAccount) accounts.get(accountNumber);
+
+            System.out.println("Enter the interest rate:");
+            BigDecimal interestRate = scanner.nextBigDecimal();
+            scanner.nextLine(); // Consume the newline character
+
+            BigDecimal adminFee = investmentAccount.calculateTax(interestRate);
+            System.out.println("Admin fee calculated: " + adminFee);
+        } else {
+            System.out.println("Investment account not found.");
         }
     }
 }

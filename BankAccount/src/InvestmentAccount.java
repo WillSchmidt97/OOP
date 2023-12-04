@@ -1,16 +1,14 @@
 import java.math.BigDecimal;
 
-public class SavingsAccount implements Account, Taxable {
+public class InvestmentAccount implements Account, Taxable {
     private String client;
     private String accountNumber;
     private BigDecimal balance;
-    private int interestDay;
 
-    public SavingsAccount(String client, String accountNumber, BigDecimal balance, int interestDay) {
+    public InvestmentAccount(String client, String accountNumber, BigDecimal balance) {
         this.client = client;
         this.accountNumber = accountNumber;
         this.balance = balance;
-        this.interestDay = interestDay;
     }
 
     @Override
@@ -30,17 +28,13 @@ public class SavingsAccount implements Account, Taxable {
     }
 
     public void calculateNewBalance(BigDecimal interestRate) {
-        if (interestDay == 27) {
-            balance = balance.add(balance.multiply(interestRate));
-            System.out.println("Interest applied. New balance: " + balance);
-        } else {
-            System.out.println("Not the interest day yet.");
-        }
+        balance = balance.add(balance.multiply(interestRate));
+        System.out.println("Interest applied. New balance: " + balance);
     }
 
-    @Override
     public BigDecimal calculateTax(BigDecimal interestRate) {
-        return BigDecimal.ZERO; // Savings accounts may not have tax in this example
+        BigDecimal profit = balance.multiply(interestRate);
+        return profit.multiply(new BigDecimal("0.005")); // 0.5% tax on profit
     }
 
     @Override
